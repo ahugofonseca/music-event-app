@@ -25,6 +25,8 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'pry'
   gem 'pry-rails'
+  # Use procfile to set start app
+  gem 'foreman'
 end
 
 group :test do
