@@ -33,6 +33,7 @@ group :test do
   # Others gems to works with rspec
   gem 'database_cleaner'
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'shoulda-matchers'
 end
 
