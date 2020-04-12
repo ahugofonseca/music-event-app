@@ -18,6 +18,13 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 ###### OTHERS GEMS #############################################################
 
+# ActiveModel::Serializer implementation and Rails hooks
+gem 'active_model_serializers'
+# Decorator Pattern
+gem 'draper'
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
+gem 'rack-cors'
+
 ################################################################################
 
 group :development, :test do
