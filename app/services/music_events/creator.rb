@@ -57,7 +57,8 @@ module MusicEvents
     end
 
     def all_events
-      MusicEvent.all.order(:scheduled_date_time).decorate
+      MusicEvent.all_in_time_zone(@time_zone)
+                .order(:scheduled_date_time).decorate
     end
   end
 end
