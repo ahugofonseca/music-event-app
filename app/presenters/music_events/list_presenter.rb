@@ -17,7 +17,7 @@ module MusicEvents
       grouped_by_day.map do |k, v|
         {
           day: k,
-          events: v.map { |h| h.except!(:id, :scheduled_date) }
+          events: v.map { |h| h.except!(:scheduled_date) }
         }
       end
     end

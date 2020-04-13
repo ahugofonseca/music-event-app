@@ -10,7 +10,19 @@ module Api
         render json: object_serialized
       end
 
+      def create
+        @music_events = MusicEvents::Creator.new(music_event_params).call
+
+        render json: @music_events
+      end
+
       private
+
+      def music_event_params
+        params.require(:music_event).permit(
+          :local, :scheduled_date, :scheduled_time, genres: [], artists: []
+        )
+      end
 
       def object_serialized
         MusicEvents::ListPresenter.new(@music_events).data
