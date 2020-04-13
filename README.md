@@ -19,16 +19,12 @@ Technical challenge to Engineering Backend position
 2. Run `bundle`
 3. Run `rails db:create db:migrate db:seed`
 
+### Automated testing
+1. Run `rspec ./spec`
 
 ### Usage
-
-1. Run automated testing: `rspec ./spec`
 
 #### Local
 
 1. Run `rails start`
 2. It will open automatically http://localhost:3000/
-
-#### Heroku
-
-- https://desafio-backend-blu.herokuapp.com/
