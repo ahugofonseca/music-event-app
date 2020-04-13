@@ -17,7 +17,7 @@ module MusicEvents
     private
 
     def search_options
-      [{ genres: @music_events.pluck(:genres).flatten.uniq }]
+      [{ genres: MusicEvent.pluck(:genres).flatten.uniq }]
     end
 
     def music_events_data
