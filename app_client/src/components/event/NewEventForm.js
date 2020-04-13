@@ -28,7 +28,7 @@ class NewEventForm extends Component {
       this.sendRequest(this.resetDataFields)
     }
 
-    sendRequest(callback) {
+    sendRequest() {
       this.props.onNewEvent(
         this.state.local.value,
         this.state.scheduled_date.value,
@@ -36,8 +36,6 @@ class NewEventForm extends Component {
         this.state.genres,
         this.state.artists
       )
-
-      callback()
     }
 
     resetDataFields() {
@@ -63,13 +61,15 @@ class NewEventForm extends Component {
     }
 
     getDataFields(fieldsData) {
-      if (fieldsData[0] == 'genres') {
+      let keys = Object.keys(fieldsData[0])
+
+      if (keys.includes('genres')) {
         this.setState({
-          genres: fieldsData[1]
+          genres: fieldsData
         })
       } else {
         this.setState({
-          artists: fieldsData[1]
+          artists: fieldsData
         })
       }
 
@@ -115,7 +115,7 @@ class NewEventForm extends Component {
               <Col m={6}>
                 <p><b>Music Genres:</b></p>
                 <DynamicMultipleInput
-                  field={'genres'}
+                  field={['genres']}
                   ref="genres"
                   getDataFields={this.getDataFields}
                 />
@@ -123,9 +123,9 @@ class NewEventForm extends Component {
               <Col m={6}>
                 <p><b>Artists:</b></p>
                 <DynamicMultipleInput
-                  field={'artists'}
-                  ref="artists"
+                  field={['order', 'artist']}
                   getDataFields={this.getDataFields}
+                  ref="artists"
                 />
               </Col>
             </Row>

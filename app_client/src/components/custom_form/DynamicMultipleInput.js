@@ -19,7 +19,7 @@ class DynamicMultipleInput extends Component {
   }
 
   sendData = () => {
-    this.props.getDataFields([this.props.field, this.state.fields]);
+    this.props.getDataFields(this.state.fields);
 
     // Disabled buttons
     let disabled = true
@@ -30,7 +30,8 @@ class DynamicMultipleInput extends Component {
 
   handleText = i => e => {
     let fields = [...this.state.fields]
-    fields[i] = e.target.value
+    fields[i][e.target.name] = e.target.value;
+
     this.setState({
       fields
     })
@@ -49,7 +50,22 @@ class DynamicMultipleInput extends Component {
 
   addField = e => {
     e.preventDefault()
-    let fields = this.state.fields.concat([''])
+
+    let lastIndex = this.props.field.length-1
+    let fieldsStr = '{'
+
+    this.props.field.forEach((item, index) => {
+      if (lastIndex == index) {
+        fieldsStr += '"'+item+'": ""}'
+      } else {
+        fieldsStr += '"'+item+'": "",'
+      }
+    })
+
+    let fields = this.state.fields.concat([
+      JSON.parse(fieldsStr)
+    ])
+
     this.setState({
       fields
     })
@@ -61,9 +77,15 @@ class DynamicMultipleInput extends Component {
         {this.state.fields.map((field, index) => (
           <Row>
             <Col m={10}>
-              <input type="text"
-                     onChange={this.handleText(index)}
-                     value={field} />
+              {Object.keys(field).map((key) => (
+                <Col m={12/Object.keys(field).length}>
+                  <input type="text"
+                         name={key}
+                         placeholder={key.capitalize()}
+                         onChange={this.handleText(index)}
+                         value={field[key]} />
+                </Col>
+              ))}
             </Col>
             <Col m={2}>
               <Button small={"true"}
@@ -83,7 +105,7 @@ class DynamicMultipleInput extends Component {
                 style={{marginRight: '5px'}}
                 disabled={this.state.disabled}
                 onClick={this.addField}
-                key={"add"+this.props.field}
+                key={"add"+this.props.field.artist}
               >
                 <Icon>add</Icon>
         </Button>

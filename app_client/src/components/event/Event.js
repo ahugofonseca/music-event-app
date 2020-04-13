@@ -52,11 +52,13 @@ class Event extends Component {
           lists: response.data.data
         })
 
+        this.refs.NewEventForm.resetDataFields()
+
         let genresOptions = response.data.search_options[0].genres
         this.refs.SearchEventComponent.setOptionsForSelect(genresOptions)
       })
       .catch(error => {
-          console.log(error)
+          console.error(error)
       })
   }
 
@@ -76,7 +78,10 @@ class Event extends Component {
   render() {
     return (
       <Row>
-        <Col m={6} s={12}>
+        <Col m={12} s={12}>
+          <NewEventForm onNewEvent={this.addNewEvent} ref="NewEventForm" />
+        </Col>
+        <Col m={12} s={12}>
           <Card>
             <SearchEventForm ref="SearchEventComponent"
               onSearchEvent={this.searchEvent}
@@ -89,9 +94,6 @@ class Event extends Component {
                                key={list.day}
                     />)
           })}
-        </Col>
-        <Col m={6} s={12}>
-          <NewEventForm onNewEvent={this.addNewEvent} />
         </Col>
       </Row>
     )

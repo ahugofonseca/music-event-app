@@ -19,15 +19,20 @@ const List = ({list}) =>
               </Row>
               <Row>
                 <Col m={6} s={12}>
-                  <b>Music Genres: </b>
+                  <b>Music Genres: </b> <br />
                   {event.genres.map((genre) => {
                     return(<Chip>{genre.capitalize()}</Chip>)
                   })}
                 </Col>
                 <Col m={6} s={12}>
-                  <b>Artists: </b>
-                  {event.artists.map((artist) => {
-                    return(<Chip>{artist.name}</Chip>)
+                  <b>Artists: </b> <br />
+                  {event.music_event_artists.map((event) => {
+                    return(
+                      <Chip>
+                        <span>{event.presentation_order}th </span>
+                        {event.artist_name}
+                      </Chip>
+                    )
                   })}
                 </Col>
               </Row>
