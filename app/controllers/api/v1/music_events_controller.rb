@@ -5,7 +5,9 @@ module Api
     # Handle request about Music Event
     class MusicEventsController < ApplicationController
       def index
-        @music_events = MusicEvent.all.order(:scheduled_date_time).decorate
+        @music_events = MusicEvent
+                        .all_in_time_zone(params[:client_time_zone])
+                        .order(:scheduled_date_time).decorate
 
         render json: object_serialized
       end
@@ -20,7 +22,8 @@ module Api
 
       def music_event_params
         params.require(:music_event).permit(
-          :local, :scheduled_date, :scheduled_time, genres: [], artists: []
+          :client_time_zone, :local, :scheduled_date, :scheduled_time,
+          genres: [], artists: []
         )
       end
 

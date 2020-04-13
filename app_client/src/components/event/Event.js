@@ -19,7 +19,7 @@ class Event extends Component {
   }
 
   getData() {
-    axios.get('api/v1/music_events')
+    axios.get('api/v1/music_events?client_time_zone='+this.getTimeZone())
       .then(response => {
         this.setState({
           lists: response.data
@@ -31,7 +31,7 @@ class Event extends Component {
   }
 
   addNewEvent(local, scheduled_date, scheduled_time, genres, artists) {
-    axios.post( '/api/v1/music_events', { music_event: {local, scheduled_date, scheduled_time, genres, artists} })
+    axios.post('/api/v1/music_events', { music_event: {client_time_zone: this.getTimeZone(), local, scheduled_date, scheduled_time, genres, artists} })
       .then(response => {
         this.setState({
           lists: response.data
@@ -40,6 +40,15 @@ class Event extends Component {
       .catch(error => {
           console.log(error)
       })
+  }
+
+  getTimeZone() {
+    function z(n) { return (n < 10 ? '0' : '') + n }
+
+    let offset = new Date().getTimezoneOffset();
+    let sign = offset < 0 ? '+' : '-';
+    offset = Math.abs(offset);
+    return sign + z(offset/60 | 0) + z(offset%60);
   }
 
   render() {

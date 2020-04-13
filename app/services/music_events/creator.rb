@@ -9,6 +9,7 @@ module MusicEvents
       @scheduled_time = attributes.dig(:scheduled_time)
       @genres = attributes.dig(:genres)
       @artists_names = attributes.dig(:artists)
+      @time_zone = attributes.dig(:client_time_zone)
     end
 
     def call
@@ -38,7 +39,7 @@ module MusicEvents
     end
 
     def scheduled_date_time
-      DateTime.parse("#{@scheduled_date} #{@scheduled_time}")
+      DateTime.parse("#{@scheduled_date} #{@scheduled_time} #{@time_zone}")
     end
 
     def event_type
