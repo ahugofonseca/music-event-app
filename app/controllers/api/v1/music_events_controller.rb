@@ -24,7 +24,7 @@ module Api
       def music_event_params
         params.require(:music_event).permit(
           :client_time_zone, :local, :scheduled_date, :scheduled_time,
-          genres: [], artists: []
+          genres: [:genres], artists: %i[order artist]
         )
       end
 

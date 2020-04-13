@@ -7,8 +7,8 @@ module MusicEvents
       @local = attributes.dig(:local)
       @scheduled_date = attributes.dig(:scheduled_date)
       @scheduled_time = attributes.dig(:scheduled_time)
-      @genres = attributes.dig(:genres)
-      @artists_names = attributes.dig(:artists)
+      @genres = attributes.dig(:genres)&.pluck(:genres)
+      @artists_list = attributes.dig(:artists)
       @time_zone = attributes.dig(:client_time_zone)
     end
 
@@ -17,6 +17,7 @@ module MusicEvents
         create_artists
         create_music_event
         associate_music_event_with_artist
+        set_presentation_order_in_event
       end
 
       use_case_response
@@ -25,8 +26,9 @@ module MusicEvents
     private
 
     def create_artists
-      @artists =
-        @artists_names.map { |artist| Artist.find_or_create_by(name: artist) }
+      @artists = @artists_list.map do |artist|
+        Artist.find_or_create_by(name: artist[:artist])
+      end
     end
 
     def create_music_event
@@ -49,6 +51,18 @@ module MusicEvents
     def associate_music_event_with_artist
       @music_event.artists << @artists
       @music_event.save!
+    end
+
+    def set_presentation_order_in_event
+      @artists.each do |artist|
+        @music_event.music_event_artists
+                    .find_by(artist: artist)
+                    .update(presentation_order: current_order(artist))
+      end
+    end
+
+    def current_order(artist)
+      @artists_list.find { |row| row[:artist] == artist.name }[:order]
     end
 
     # Presenter
