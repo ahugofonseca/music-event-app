@@ -1,14 +1,16 @@
 import React from "react";
-import { Navbar, NavItem, Row} from 'react-materialize';
+import { Col, Row} from 'react-materialize';
 import { NavLink } from 'react-router-dom'
 
 
 const Header = () => (
-  <Row>
-    <Navbar className="grey darken-2">
-      <li><NavLink to="/">Events</NavLink></li>
-    </Navbar>
-  </Row>
+  <nav className="grey darken-2">
+    <Row>
+      <Col m={1}>
+        <NavLink to="/">Events</NavLink>
+      </Col>
+    </Row>
+  </nav>
 );
 
 export default Header;
