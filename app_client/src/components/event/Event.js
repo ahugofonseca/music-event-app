@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import EventList from './EventList';
 import NewEventForm from './NewEventForm';
-import { Row, Col, Card } from 'react-materialize';
+import SearchEventForm from './SearchEventForm';
+import { Row, Col, Card, Collapsible, CollapsibleItem, Icon} from 'react-materialize';
 
 class Event extends Component {
   constructor(props) {
@@ -12,18 +13,32 @@ class Event extends Component {
         lists: []
     }
     this.addNewEvent = this.addNewEvent.bind(this)
+    this.searchEvent = this.searchEvent.bind(this)
+    this.getData = this.getData.bind(this)
   }
 
   componentDidMount() {
     this.getData()
   }
 
-  getData() {
-    axios.get('api/v1/music_events?client_time_zone='+this.getTimeZone())
+  getData(filters=null) {
+    let url = 'api/v1/music_events?client_time_zone='+this.getTimeZone()
+
+    if (filters) {
+      filters.forEach((item, index) => {
+        url += '&filters[genres][]='+item
+        if (filters.size -1 > index) { url += '&'}
+      })
+    }
+
+    axios.get(url)
       .then(response => {
         this.setState({
-          lists: response.data
+          lists: response.data.data
         })
+
+        let genresOptions = response.data.search_options[0].genres
+        this.refs.SearchEventComponent.setOptionsForSelect(genresOptions)
       })
       .catch(error =>
         console.error(error)
@@ -34,12 +49,19 @@ class Event extends Component {
     axios.post('/api/v1/music_events', { music_event: {client_time_zone: this.getTimeZone(), local, scheduled_date, scheduled_time, genres, artists} })
       .then(response => {
         this.setState({
-          lists: response.data
+          lists: response.data.data
         })
+
+        let genresOptions = response.data.search_options[0].genres
+        this.refs.SearchEventComponent.setOptionsForSelect(genresOptions)
       })
       .catch(error => {
           console.log(error)
       })
+  }
+
+  searchEvent(filters) {
+    this.getData(filters)
   }
 
   getTimeZone() {
@@ -54,15 +76,22 @@ class Event extends Component {
   render() {
     return (
       <Row>
-        <Col m={12} s={12}>
-          <NewEventForm onNewEvent={this.addNewEvent} />
-        </Col>
-        <Col m={12} s={12}>
+        <Col m={6} s={12}>
+          <Card>
+            <SearchEventForm ref="SearchEventComponent"
+              onSearchEvent={this.searchEvent}
+              genresOptions={this.state.searchOptions}
+            />
+          </Card>
+
           {this.state.lists.map((list, index) => {
             return (<EventList list={list}
                                key={list.day}
                     />)
           })}
+        </Col>
+        <Col m={6} s={12}>
+          <NewEventForm onNewEvent={this.addNewEvent} />
         </Col>
       </Row>
     )

@@ -8,10 +8,17 @@ module MusicEvents
     end
 
     def data
-      music_events_data
+      {
+        search_options: search_options,
+        data: music_events_data
+      }
     end
 
     private
+
+    def search_options
+      [{ genres: @music_events.pluck(:genres).flatten.uniq }]
+    end
 
     def music_events_data
       grouped_by_day.map do |k, v|

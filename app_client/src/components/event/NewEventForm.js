@@ -18,10 +18,17 @@ class NewEventForm extends Component {
 
     this.submit = this.submit.bind(this)
     this.getDataFields = this.getDataFields.bind(this)
+    this.sendRequest = this.sendRequest.bind(this)
+    this.resetDataFields = this.resetDataFields.bind(this)
   }
 
     submit(e) {
       e.preventDefault()
+
+      this.sendRequest(this.resetDataFields)
+    }
+
+    sendRequest(callback) {
       this.props.onNewEvent(
         this.state.local.value,
         this.state.scheduled_date.value,
@@ -30,6 +37,10 @@ class NewEventForm extends Component {
         this.state.artists
       )
 
+      callback()
+    }
+
+    resetDataFields() {
       this.setState({
         local: '',
         scheduled_date: '',
@@ -38,6 +49,14 @@ class NewEventForm extends Component {
         artists: [],
         childFields: 1
       })
+
+      let form = document.getElementById('new_event_form');
+      let inputs = form.getElementsByTagName("input");
+
+      for (var item of inputs) {
+        item.value = ''
+      }
+
 
       this.refs.genres.resetFields()
       this.refs.artists.resetFields()
@@ -58,7 +77,7 @@ class NewEventForm extends Component {
         childFields: this.state.childFields + 1
       })
 
-      let button = document.getElementById('new_event_form');
+      let button = document.getElementById('new_event_button');
 
       if (this.state.childFields == 2) {
         button.disabled = false
@@ -69,7 +88,7 @@ class NewEventForm extends Component {
     render() {
       return (
         <Card title="New event">
-          <form onSubmit={this.submit}>
+          <form onSubmit={this.submit} id="new_event_form">
             <Row>
               <Col m={6} s={12}>
                 <label htmlFor="scheduled_date">Event Date:</label>
@@ -115,10 +134,10 @@ class NewEventForm extends Component {
               <Button node="button"
                       type="submit"
                       waves="light"
-                      id="new_event_form"
+                      id="new_event_button"
                       disabled={true}
               >
-                Submit <Icon right>send</Icon>
+                Create event <Icon right>send</Icon>
               </Button>
             </div>
           </form>

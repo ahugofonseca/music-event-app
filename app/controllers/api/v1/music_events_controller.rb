@@ -6,6 +6,7 @@ module Api
     class MusicEventsController < ApplicationController
       def index
         @music_events = MusicEvent
+                        .filtered_by_genres(params.dig(:filters, :genres))
                         .all_in_time_zone(params[:client_time_zone])
                         .order(:scheduled_date_time).decorate
 

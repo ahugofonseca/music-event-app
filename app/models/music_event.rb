@@ -13,6 +13,10 @@ class MusicEvent < ApplicationRecord
   enum event_type: %i[concert festival]
 
   # Scopes
+  scope :filtered_by_genre, lambda { |genre|
+    where(':genre_item = ANY(genres)', genre_item: genre)
+  }
+
   scope :all_in_time_zone, lambda { |offset = '+0000'|
     select("
       music_events.*,
@@ -23,6 +27,19 @@ class MusicEvent < ApplicationRecord
   }
 
   # Methods
+  def self.filtered_by_genres(genres_list)
+    return all if genres_list.nil?
+
+    queries = genres_list.map do |genre|
+      { method: :filtered_by_genre,
+        argument: genre }
+    end
+
+    queries.inject(self) do |klass, query|
+      klass.send(query[:method], query[:argument])
+    end
+  end
+
   def self.find_time_zone_by(offset)
     offset = offset.nil? ? '+0000' : offset
 
