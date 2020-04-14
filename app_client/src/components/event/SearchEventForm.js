@@ -30,7 +30,11 @@ class SearchEventForm extends Component {
   submit(e) {
     e.preventDefault()
 
-    this.props.onSearchEvent(this.state.selectedOption.map(item => item.value))
+    if (this.state.selectedOption) {
+      this.props.onSearchEvent(this.state.selectedOption.map(item => item.value))
+    } else {
+      this.props.onSearchEvent(null) // Get all data without filter
+    }
   }
 
   handleChange = selectedOption => {
