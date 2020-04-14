@@ -3,7 +3,7 @@ import axios from 'axios';
 import EventList from './EventList';
 import NewEventForm from './NewEventForm';
 import SearchEventForm from './SearchEventForm';
-import { Row, Col, Card, Collapsible, CollapsibleItem, Icon} from 'react-materialize';
+import { Row, Col, Card} from 'react-materialize';
 
 class Event extends Component {
   constructor(props) {
@@ -91,7 +91,7 @@ class Event extends Component {
 
           {this.state.lists.map((list, index) => {
             return (<EventList list={list}
-                               key={list.day}
+                               key={list.day+'_'+index}
                     />)
           })}
         </Col>

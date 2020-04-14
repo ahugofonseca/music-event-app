@@ -3,11 +3,11 @@ import { Row, Col, Card, Chip } from 'react-materialize';
 
 const List = ({list}) =>
   <div>
-    <Card title="Music Events" className="grey lighten-4">
+    <Card title="Music Events" className="grey lighten-4" key={list.day}>
       <h3>{list.day}</h3>
         {list.events.map((event, index) => {
           return (
-            <Card title={event.event_type.capitalize()}>
+            <Card title={event.event_type.capitalize()} key={index}>
               <Row>
                 <Col m={12}><br></br></Col>
                 <Col m={6} s={12}>
@@ -21,14 +21,14 @@ const List = ({list}) =>
                 <Col m={6} s={12}>
                   <b>Music Genres: </b> <br />
                   {event.genres.map((genre) => {
-                    return(<Chip>{genre.capitalize()}</Chip>)
+                    return(<Chip key={genre}>{genre.capitalize()}</Chip>)
                   })}
                 </Col>
                 <Col m={6} s={12}>
                   <b>Artists: </b> <br />
                   {event.music_event_artists.map((event) => {
                     return(
-                      <Chip>
+                      <Chip key={event.presentation_order}>
                         <span>{event.presentation_order}th </span>
                         {event.artist_name}
                       </Chip>

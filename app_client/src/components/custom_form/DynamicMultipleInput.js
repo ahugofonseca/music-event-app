@@ -75,10 +75,10 @@ class DynamicMultipleInput extends Component {
     return (
       <div>
         {this.state.fields.map((field, index) => (
-          <Row>
+          <Row key={index}>
             <Col m={10}>
               {Object.keys(field).map((key) => (
-                <Col m={12/Object.keys(field).length}>
+                <Col m={12/Object.keys(field).length} key={key}>
                   <input type="text"
                          name={key}
                          placeholder={key.capitalize()}
